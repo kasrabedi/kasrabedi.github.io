@@ -1,0 +1,50 @@
+name: Restore full al-folio source
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  migrate:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout production repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Checkout complete al-folio source
+        uses: actions/checkout@v4
+        with:
+          repository: kasrabedi/kasra-al-folio
+          path: al-folio-source
+          fetch-depth: 1
+
+      - name: Replace wrapper with the complete site source
+        run: |
+          rsync -a --delete \
+            --exclude '/.git/' \
+            --exclude '/.github/' \
+            al-folio-source/ ./
+          rm -rf al-folio-source
+          sed -i 's#baseurl: "/kasra-al-folio"#baseurl: ""#' _config.yml
+          sed -i '/^  - jekyll-jupyter-notebook$/d' _config.yml
+          sed -i '/^imagemagick:/,/^$/ s/^  enabled: true/  enabled: false/' _config.yml
+          rm -rf assets/jupyter
+
+      - name: Commit restored source
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          if git diff --cached --quiet; then
+            echo 'No source changes to commit.'
+            exit 0
+          fi
+          git commit -m 'Restore complete al-folio website source'
+          git push
