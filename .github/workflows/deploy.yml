@@ -1,3 +1,4 @@
+# Deployment workflow for Kasra Abedi's al-folio site. The source of truth is kasrabedi/kasra-al-folio.
 name: Deploy Kasra Abedi website
 
 on:
