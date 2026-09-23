@@ -3,6 +3,8 @@ name: Restore full al-folio source
 on:
   push:
     branches: [main]
+    paths:
+      - '.github/workflows/migrate-al-folio-source.yml'
   workflow_dispatch:
 
 permissions:
