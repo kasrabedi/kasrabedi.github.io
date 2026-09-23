@@ -42,6 +42,7 @@ jobs:
           sed -i 's#baseurl: "/kasra-al-folio"#baseurl: ""#' _config.yml
           sed -i '/^  - jekyll-jupyter-notebook$/d' _config.yml
           sed -i '/^imagemagick:/,/^$/ s/^  enabled: true/  enabled: false/' _config.yml
+          rm -rf assets/jupyter
           grep -E '^(url|baseurl):' _config.yml
 
       - name: Build al-folio for the root domain
