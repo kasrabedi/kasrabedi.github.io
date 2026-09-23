@@ -35,13 +35,15 @@ jobs:
           bundler-cache: true
           working-directory: site-source
 
-      - name: Build al-folio for the root domain
+      - name: Configure al-folio for the primary domain
         working-directory: site-source
         run: |
-          bundle exec jekyll build \
-            --url "https://kasrabedi.github.io" \
-            --baseurl "" \
-            --destination ../_site
+          sed -i 's#baseurl: "/kasra-al-folio"#baseurl: ""#' _config.yml
+          grep -E '^(url|baseurl):' _config.yml
+
+      - name: Build al-folio for the root domain
+        working-directory: site-source
+        run: bundle exec jekyll build --destination ../_site
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
