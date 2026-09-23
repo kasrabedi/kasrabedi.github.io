@@ -50,3 +50,5 @@ jobs:
           fi
           git commit -m 'Restore complete al-folio website source'
           git push
+
+# Triggered after unarchiving kasra-al-folio so the complete source can be restored here.
