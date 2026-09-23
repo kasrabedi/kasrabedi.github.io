@@ -29,6 +29,14 @@ jobs:
           path: site-source
           fetch-depth: 1
 
+      - name: Install site build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y imagemagick python3-venv
+          python3 -m venv "$RUNNER_TEMP/jupyter-env"
+          "$RUNNER_TEMP/jupyter-env/bin/pip" install --disable-pip-version-check --no-cache-dir jupyter nbconvert
+          echo "$RUNNER_TEMP/jupyter-env/bin" >> "$GITHUB_PATH"
+
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
